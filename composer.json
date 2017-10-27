@@ -1,0 +1,22 @@
+{
+    "name": "NEIIST-DevTeam/mailman2-php-wrapper",
+    "description": "A PHP wrapper for Mailman2 Web API.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["mailman", "neiist"],
+    "authors": [
+        {
+            "name": "Luis Ávila",
+            "email": "filipe@avilaesousa.com"
+        }
+    ],
+    "require": {
+        "php": "^5.4",
+        "php-curl-class/php-curl-class": "^7.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mailman2Wrapper\\": "src/"
+        }
+    }
+}
