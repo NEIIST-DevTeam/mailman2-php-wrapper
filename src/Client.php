@@ -29,5 +29,16 @@ class Client {
         $this->curl->setCookie('groups.neiist.rp+admin', $this->curl->getCookie('groups.neiist.rp+admin'));
         return true;
     }
+    
+    private function updateName($email, $username){
+        $this->curl->post($this->host . '/options/' . $this->group . '/' . $email, array(
+            'fullname' => $username,
+            'change-of-address' => 'Change My Address and Name'
+        ));
+        // Handle 401, 403, 500
+        if($this->curl->error){
+            throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
+        }
+        return true;
     }
 }
