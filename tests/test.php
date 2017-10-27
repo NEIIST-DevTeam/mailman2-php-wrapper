@@ -1,7 +1,7 @@
 <?php
 
-require_once('vendor/autoload.php');
-require_once('src/Client.php');
+require_once('../vendor/autoload.php');
+require_once('../src/Client.php');
 
 use Mailman2Wrapper\Client;
 
