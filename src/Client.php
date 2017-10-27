@@ -30,6 +30,18 @@ class Client {
         return true;
     }
     
+    private function unsubscribe($email){
+        $this->curl->post($this->host . '/options/' . $this->group . '/' . $email, array(
+            'unsub' => 'Unsubscribe',
+            'unsubconfirm' => 1
+        ));
+        // Handle 401, 403, 500
+        if($this->curl->error){
+            throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
+        }
+        return true;
+    }
+
     private function updateName($email, $username){
         $this->curl->post($this->host . '/options/' . $this->group . '/' . $email, array(
             'fullname' => $username,
