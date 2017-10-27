@@ -7,4 +7,4 @@ use Mailman2Wrapper\Client;
 
 $PASSWORD = isset($argv[1]) ? $argv[1] : "";
 
-new Client("https://mlists.ist.utl.pt/mailman/admin/groups.neiist.socios", "$PASSWORD");
+new Client("https://mlists.ist.utl.pt/mailman", "groups.neiist.socios", $PASSWORD);
