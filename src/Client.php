@@ -90,6 +90,7 @@ class Client {
         if(preg_match_all('%<a.*?href=(?:"|\').*?/options/' . $this->group . '/.*?(?:--at--|@).*?(?:"|\')-*?>(.*?(?:(?: |)*at(?: |)*|@).*?)</a>%', $this->curl->response, $matches)){
             foreach($matches[1] as &$value){
                 $value = str_replace(' at ', '@', $value);
+                $value = str_replace(' ', '', $value);
             }
             return $matches[1];
         }
