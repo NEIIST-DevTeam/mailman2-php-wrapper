@@ -81,6 +81,20 @@ class Client {
         return true;
     }
 
+    public function listSubscribers(){
+        $this->curl->get($this->host . '/roster/' . $this->group);
+        if($this->curl->error){
+            throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
+        }
+        if(preg_match_all('%<a.*?href=(?:"|\').*?/options/' . $this->group . '/.*?(?:--at--|@).*?(?:"|\')-*?>(.*?(?:(?: |)*at(?: |)*|@).*?)</a>%', $this->curl->response, $matches)){
+            foreach($matches[1] as $key=>$value){
+                $matches[1][$key] = str_replace(' at ', '@', $value);
+            }
+            return $matches[1];
+        }
+        return false;
+    }
+
     private function getCSRF($where){
         $this->curl->get($where);
         if($this->curl->error){
