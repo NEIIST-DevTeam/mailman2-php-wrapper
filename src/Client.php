@@ -45,9 +45,35 @@ class Client {
         );
         $this->curl->setHeader('Content-Type', 'multipart/form-data');
         $this->curl->post($this->host . '/admin/' . $this->group . '/members/add', $data);
+
         // Let's restore things to how they were
         unlink('dummy');
         $this->curl->setHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        // Handle 401, 403, 500
+        if($this->curl->error){
+            throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
+        }
+        return true;
+    }
+
+    public function unsubscribe($email){
+        $this->curl->post($this->host . '/options/' . $this->group . '/' . $email, array(
+            'unsub' => 'Unsubscribe',
+            'unsubconfirm' => 1
+        ));
+        // Handle 401, 403, 500
+        if($this->curl->error){
+            throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
+        }
+        return true;
+    }
+
+    public function updateName($email, $username){
+        $this->curl->post($this->host . '/options/' . $this->group . '/' . $email, array(
+            'fullname' => $username,
+            'change-of-address' => 'Change My Address and Name'
+        ));
         // Handle 401, 403, 500
         if($this->curl->error){
             throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
@@ -58,7 +84,6 @@ class Client {
     private function getCSRF($where){
         $this->curl->get($where);
         if($this->curl->error){
-            throw new Exception($this->curl->errorMessage, $this->curl->errorCode);
             throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
         }
         if(preg_match('/<input.*?name=(\'|")csrf_token("|\'").*?>/', $this->curl->response, $match)){
