@@ -22,5 +22,8 @@
         "psr-4": {
             "Mailman2Wrapper\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "php tests/test.php"
     }
 }
