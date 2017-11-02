@@ -39,8 +39,8 @@ class Client {
             'subscribees' => join('\n', $who),
             'subscribees_upload' => new \CURLFile('dummy'),
             'subscribe_or_invite' => 0,
-            'send_welcome_msg_to_this_batch' => $welcome,
-            'send_notifications_to_list_owner' => $notify,
+            'send_welcome_msg_to_this_batch' => (int) $welcome,
+            'send_notifications_to_list_owner' => (int) $notify,
             'setmemberopts_btn' => 'Submit your changes'
         );
         $this->curl->setHeader('Content-Type', 'multipart/form-data');
