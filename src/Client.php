@@ -26,7 +26,7 @@ class Client {
         if($this->curl->error){
             throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
         }
-        $this->curl->setCookie('groups.neiist.rp+admin', $this->curl->getCookie('groups.neiist.rp+admin'));
+        $this->curl->setCookies($this->curl->responseCookies);
         return true;
     }
 
