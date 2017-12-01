@@ -50,7 +50,7 @@ catch(Exception $e){
 
 /* Test unsubscribe */
 try {
-    $client->unsubscribe("email@example.com");
+    $client->unsubscribe("email@example.com", false, false);
 }
 catch(Exception $e){
     error('Unable to unsubscribe');

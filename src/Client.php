@@ -30,25 +30,18 @@ class Client {
         return true;
     }
 
-    public function subscribe($who, $welcome = true, $notify = false){
+    public function subscribe($who, $welcome = true, $notify = true) {
         if(!is_array($who)) $who = array($who);
-        // We need a dummy file to send a multipart/form-data
-        touch('dummy');
+
         $data = array(
             'csrf_token' => $this->getCSRF($this->host . '/admin/' . $this->group . '/members/add'),
             'subscribees' => join('\n', $who),
-            'subscribees_upload' => new \CURLFile('dummy'),
             'subscribe_or_invite' => 0,
             'send_welcome_msg_to_this_batch' => (int) $welcome,
             'send_notifications_to_list_owner' => (int) $notify,
             'setmemberopts_btn' => 'Submit your changes'
         );
-        $this->curl->setHeader('Content-Type', 'multipart/form-data');
         $this->curl->post($this->host . '/admin/' . $this->group . '/members/add', $data);
-
-        // Let's restore things to how they were
-        unlink('dummy');
-        $this->curl->setHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         // Handle 401, 403, 500
         if($this->curl->error){
@@ -57,11 +50,18 @@ class Client {
         return true;
     }
 
-    public function unsubscribe($email){
-        $this->curl->post($this->host . '/options/' . $this->group . '/' . $email, array(
-            'unsub' => 'Unsubscribe',
-            'unsubconfirm' => 1
-        ));
+    public function unsubscribe($who, $bye = true, $notify = true){
+        if(!is_array($who)) $who = array($who);
+
+        $data = array(
+            'csrf_token' => $this->getCSRF($this->host . '/admin/' . $this->group . '/members/remove'),
+            'unsubscribees' => join('\n', $who),
+            'send_unsub_ack_to_this_batch' => (int) $bye,
+            'send_unsub_notifications_to_list_owner' => (int) $notify,
+            'setmemberopts_btn' => 'Submit your changes'
+        );
+        $this->curl->post($this->host . '/admin/' . $this->group . '/members/remove', $data);
+
         // Handle 401, 403, 500
         if($this->curl->error){
             throw new Exception($this->curl->httpErrorMessage, $this->curl->httpError);
